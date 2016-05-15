@@ -65,6 +65,15 @@ def untag(title, tags):
 
 @main.command()
 @click.argument('title', type=str)
+def edit(title):
+    n = Note(title)
+    n.load()
+    n.edit()
+    n.touch()
+
+
+@main.command()
+@click.argument('title', type=str)
 def show(title):
     n = Note(title)
     n.load()

@@ -37,6 +37,12 @@ class Note:
         with open(self._path, 'a') as f:
             f.write('\n' + (ctx or get_multline(self)))
 
+    def edit(self):
+        try:
+            click.edit(filename=self._path, editor=cfg['editor'])
+        except:
+            click.edit(filename=self._path)
+
     def add_tags(self, tags):
         _tags = self._get_tags()
         _tags.extend(tags.split(','))
