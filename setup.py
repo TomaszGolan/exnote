@@ -1,7 +1,7 @@
 from setuptools import setup
 import exnote
 
-with open('README.rst') as f:
+with open('README.md') as f:
     long_description = f.read()
 
 
