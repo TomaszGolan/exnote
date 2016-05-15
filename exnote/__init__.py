@@ -1,0 +1,6 @@
+__author__ = "Tomasz Golan"
+__email__ = "tomasz.golan@gmail.com"
+__version__ = "0.0.1"
+__status__ = "1 - Planning"
+__license__ = "MIT"
+__copyright__ = "Copyright (C) 2016 Tomasz Golan"
