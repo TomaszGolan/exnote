@@ -22,7 +22,7 @@ def new(title, note, tags):
 @main.command()
 @click.argument('title', type=str)
 @click.option('--note', type=str, default=None)
-def append(title, note, tags):
+def append(title, note):
     n = Note(title)
     n.load()
     n.append(note)
@@ -61,7 +61,7 @@ def untag(title, tags):
     n = Note(title)
     n.remove_tags(tags)
     n.touch()
-    
+
 
 @main.command()
 @click.argument('title', type=str)

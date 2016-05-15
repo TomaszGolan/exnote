@@ -12,6 +12,7 @@ class Note:
         self._title = title
         self._path = os.path.join(cfg['path'], title)
         self._meta = self._path + ".meta"
+        self._ctx = ''
 
     def __str__(self):
         return self._title + '\n' + '='*len(self._title) + '\n\n' + self._ctx
@@ -22,7 +23,7 @@ class Note:
             sys.exit(1)
 
         with open(self._path, 'w') as f:
-            f.write(ctx or get_multline())
+            f.write(ctx or get_multline(self))
 
     def load(self):
         if not os.path.isfile(self._path):
@@ -34,7 +35,7 @@ class Note:
 
     def append(self, ctx=None):
         with open(self._path, 'a') as f:
-            f.write('\n' + (ctx or get_multline(self._ctx)))
+            f.write('\n' + (ctx or get_multline(self)))
 
     def add_tags(self, tags):
         _tags = self._get_tags()
