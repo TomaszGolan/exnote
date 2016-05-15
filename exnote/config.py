@@ -38,3 +38,6 @@ def cfg_init():
 
     if not os.path.exists(cfg['path']):
         os.makedirs(cfg['path'])
+
+    if not os.path.exists(os.path.join(cfg['path'], ".meta")):
+        os.makedirs(os.path.join(cfg['path'], ".meta"))

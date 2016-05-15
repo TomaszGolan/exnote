@@ -1,7 +1,10 @@
+from __future__ import print_function
+
 import click
 import os
 from config import cfg, cfg_init
 from note import Note
+from containter import Container
 
 
 @click.group()
@@ -14,7 +17,7 @@ def main():
 @click.option('--note', type=str, default=None)
 @click.option('--tags', type=str, default=None)
 def new(title, note, tags):
-    n = Note(title)
+    n = Note(title.replace('/', '.'))
     n.new(note)
     n.create_meta(tags)
 
@@ -33,7 +36,7 @@ def append(title, note):
 @click.argument('title', type=str)
 def archive(title):
     n = Note(title)
-    n.load()
+    n.confirm()
     n.archive()
 
 
@@ -41,7 +44,7 @@ def archive(title):
 @click.argument('title', type=str)
 def unarchive(title):
     n = Note(title)
-    n.load()
+    n.confirm()
     n.unarchive()
 
 
@@ -50,6 +53,7 @@ def unarchive(title):
 @click.option('--tags', type=str, required=True)
 def tag(title, tags):
     n = Note(title)
+    n.confirm()
     n.add_tags(tags)
     n.touch()
 
@@ -59,6 +63,7 @@ def tag(title, tags):
 @click.option('--tags', type=str, required=True)
 def untag(title, tags):
     n = Note(title)
+    n.confirm()
     n.remove_tags(tags)
     n.touch()
 
@@ -67,7 +72,7 @@ def untag(title, tags):
 @click.argument('title', type=str)
 def edit(title):
     n = Note(title)
-    n.load()
+    n.confirm()
     n.edit()
     n.touch()
 
@@ -78,3 +83,11 @@ def show(title):
     n = Note(title)
     n.load()
     print(n)
+
+
+@main.command()
+@click.argument('has', type=str, nargs=-1)
+@click.option('--tags', type=str, default=None)
+def list(has, tags):
+    ctr = Container()
+    ctr.list(tags)
