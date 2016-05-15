@@ -61,7 +61,7 @@ exnote tag title --tags 'tag4, tag5, tag6'  # or tagged existing note
 
 or untagged:
 
-``
+```
 exnote untag title --tags 'tag2, tag6'
 ```
 
