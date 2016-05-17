@@ -50,7 +50,7 @@ class Note:
 
     def add_tags(self, tags):
         _tags = self._get_tags()
-        _tags.extend(tags.split(','))
+        _tags.extend("".join(tags.split()).split(','))
         self._change_meta("tags", ','.join(set(_tags)))
 
     def remove_tags(self, tags):
@@ -95,9 +95,14 @@ class Note:
 
         time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+        if tags:
+            tags = "".join(tags.split()).split(',')
+        else:
+            tags = ''
+
         meta.set("note", "birthday", time)
         meta.set("note", "last_update", time)
-        meta.set("note", "tags", tags or '')
+        meta.set("note", "tags", tags)
         meta.set("note", "archived", "False")
 
         with open(self._meta, 'w') as f:
