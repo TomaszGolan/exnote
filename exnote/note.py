@@ -96,7 +96,7 @@ class Note:
         time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         if tags:
-            tags = "".join(tags.split()).split(',')
+            tags = "".join(tags.split())
         else:
             tags = ''
 

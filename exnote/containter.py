@@ -10,7 +10,7 @@ from note import Note
 def tag_or_no(tags):
     if not tags:
         return ''
-    return "#" + ','.join(tags)
+    return "#" + ' #'.join(tags)
 
 
 class Container:
@@ -37,7 +37,10 @@ class Container:
             tags = tags.split(',')
             notes = [n for n in notes if bool(set(tags) & set(n[1]['tags']))]
 
-        width = len(max([n[0] for n in notes], key=len)) + 2
+        try:
+            width = len(max([n[0] for n in notes], key=len)) + 2
+        except:
+            return
 
         for i, note in enumerate(notes):
             print("%.2d. %s %s" % (i+1, note[0].ljust(width),
