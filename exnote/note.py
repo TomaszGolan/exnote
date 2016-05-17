@@ -63,10 +63,31 @@ class Note:
     def _get_tags(self):
         meta = SafeConfigParser()
         meta.read(self._meta)
-        try:
-            return meta.get("note", "tags").split(',')
-        except:
+        if meta.get("note", "tags"):
+            return meta.get("note", "tags").strip().split(',')
+        else:
             return []
+
+    def _is_archived(self):
+        meta = SafeConfigParser()
+        meta.read(self._meta)
+        return meta.get("note", "archived") == "True"
+
+    def _when_touched(self):
+        meta = SafeConfigParser()
+        meta.read(self._meta)
+        return meta.get("note", "last_update")
+
+    def get_meta(self):
+        try:
+            meta = {}
+            meta['tags'] = self._get_tags()
+            meta['archived'] = self._is_archived()
+            meta['last_update'] = self._when_touched()
+            return meta
+        except:
+            self.create_meta()
+            self.get_meta()
 
     def create_meta(self, tags=None):
         meta = SafeConfigParser()

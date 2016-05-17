@@ -14,8 +14,8 @@ def main():
 
 @main.command()
 @click.argument('title', type=str)
-@click.option('--note', type=str, default=None)
-@click.option('--tags', type=str, default=None)
+@click.option('-n', '--note', type=str, default=None)
+@click.option('-t', '--tags', type=str, default=None)
 def new(title, note, tags):
     n = Note(title.lstrip('.').replace('/', '.'))
     n.new(note)
@@ -24,7 +24,7 @@ def new(title, note, tags):
 
 @main.command()
 @click.argument('title', type=str)
-@click.option('--note', type=str, default=None)
+@click.option('-n', '--note', type=str, default=None)
 def append(title, note):
     n = Note(title)
     n.load()
@@ -50,7 +50,7 @@ def unarchive(title):
 
 @main.command()
 @click.argument('title', type=str)
-@click.option('--tags', type=str, required=True)
+@click.option('-t', '--tags', type=str, required=True)
 def tag(title, tags):
     n = Note(title)
     n.confirm()
@@ -60,7 +60,7 @@ def tag(title, tags):
 
 @main.command()
 @click.argument('title', type=str)
-@click.option('--tags', type=str, required=True)
+@click.option('-t', '--tags', type=str, required=True)
 def untag(title, tags):
     n = Note(title)
     n.confirm()
@@ -86,8 +86,8 @@ def show(title):
 
 
 @main.command()
-@click.argument('has', type=str, nargs=-1)
-@click.option('--tags', type=str, default=None)
-def list(has, tags):
+@click.option('-t', '--tags', type=str, default=None)
+@click.option('-a', '--all', type=str, is_flag=True)
+def list(tags, all):
     ctr = Container()
-    ctr.list(tags)
+    ctr.list(tags, all)
