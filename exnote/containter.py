@@ -7,6 +7,12 @@ from utils import ls
 from note import Note
 
 
+def tag_or_no(tags):
+    if not tags:
+        return ''
+    return "#" + ','.join(tags)
+
+
 class Container:
     def __init__(self):
         self._clean()
@@ -31,5 +37,8 @@ class Container:
             tags = tags.split(',')
             notes = [n for n in notes if bool(set(tags) & set(n[1]['tags']))]
 
+        width = len(max([n[0] for n in notes], key=len)) + 5
+
         for i, note in enumerate(notes):
-            print("%.2d. %s" % (i+1, note[0]))
+            print("%.2d. %s %s" % (i+1, note[0].ljust(width),
+                  tag_or_no(note[1]['tags'])))
