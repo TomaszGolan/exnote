@@ -17,7 +17,7 @@ def main():
 @click.option('--note', type=str, default=None)
 @click.option('--tags', type=str, default=None)
 def new(title, note, tags):
-    n = Note(title.replace('/', '.'))
+    n = Note(title.lstrip('.').replace('/', '.'))
     n.new(note)
     n.create_meta(tags)
 
