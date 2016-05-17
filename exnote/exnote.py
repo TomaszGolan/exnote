@@ -12,19 +12,19 @@ def main():
     cfg_init()
 
 
-@main.command()
+@main.command(help='Create a new note.')
 @click.argument('title', type=str)
-@click.option('-n', '--note', type=str, default=None)
-@click.option('-t', '--tags', type=str, default=None)
+@click.option('-n', '--note', type=str, default=None, help='Note subject.')
+@click.option('-t', '--tags', type=str, default=None, help='Note tags.')
 def new(title, note, tags):
     n = Note(title.lstrip('.').replace('/', '.'))
     n.new(note)
     n.create_meta(tags)
 
 
-@main.command()
+@main.command(help="Append some text to existing note.")
 @click.argument('title', type=str)
-@click.option('-n', '--note', type=str, default=None)
+@click.option('-n', '--note', type=str, default=None, help='Note subject.')
 def append(title, note):
     n = Note(title)
     n.load()
@@ -32,7 +32,7 @@ def append(title, note):
     n.touch()
 
 
-@main.command()
+@main.command(help="Archive a note.")
 @click.argument('title', type=str)
 def archive(title):
     n = Note(title)
@@ -40,7 +40,7 @@ def archive(title):
     n.archive()
 
 
-@main.command()
+@main.command(help="Unarchive a note.")
 @click.argument('title', type=str)
 def unarchive(title):
     n = Note(title)
@@ -48,9 +48,9 @@ def unarchive(title):
     n.unarchive()
 
 
-@main.command()
+@main.command(help="Add tags to a note.")
 @click.argument('title', type=str)
-@click.option('-t', '--tags', type=str, required=True)
+@click.option('-t', '--tags', type=str, required=True, help='Note tags.')
 def tag(title, tags):
     n = Note(title)
     n.confirm()
@@ -58,9 +58,9 @@ def tag(title, tags):
     n.touch()
 
 
-@main.command()
+@main.command(help="Remove tags from a note.")
 @click.argument('title', type=str)
-@click.option('-t', '--tags', type=str, required=True)
+@click.option('-t', '--tags', type=str, required=True, help='Note tags.')
 def untag(title, tags):
     n = Note(title)
     n.confirm()
@@ -68,7 +68,7 @@ def untag(title, tags):
     n.touch()
 
 
-@main.command()
+@main.command(help="Edit a note with external editor.")
 @click.argument('title', type=str)
 def edit(title):
     n = Note(title)
@@ -77,7 +77,7 @@ def edit(title):
     n.touch()
 
 
-@main.command()
+@main.command(help="Print a note.")
 @click.argument('title', type=str)
 def show(title):
     n = Note(title)
@@ -85,9 +85,9 @@ def show(title):
     print(n)
 
 
-@main.command()
-@click.option('-t', '--tags', type=str, default=None)
-@click.option('-a', '--all', type=str, is_flag=True)
+@main.command('ls', help='List of notes.')
+@click.option('-t', '--tags', type=str, default=None, help='Filter by tags.')
+@click.option('-a', '--all', type=str, is_flag=True, help='Show archived.')
 def list(tags, all):
     ctr = Container()
     ctr.list(tags, all)
