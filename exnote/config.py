@@ -4,11 +4,18 @@ from ConfigParser import SafeConfigParser
 import os
 
 _config = os.path.expanduser("~/.exnote.ini")
+_bashrc = os.path.expanduser("~/.bashrc")
+_autocomplete = 'eval "$(_EXNOTE_COMPLETE=source exnote)"'
 
 cfg = {
     "path":   os.path.expanduser("~/.exnote"),
     "editor": "vi"
 }
+
+
+def _enable_ac():
+    with open(_bashrc, 'a') as f:
+        f.write('\n' + _autocomplete)
 
 
 def cfg_init():
@@ -25,6 +32,13 @@ def cfg_init():
 
         with open(_config, 'w') as f:
             _cfg.write(f)
+
+        print("\nAuto-complete can be enabled by adding: \
+              \n\n    %s\n\nto ~/.bashrc"
+              % _autocomplete)
+
+        if raw_input("\nDo you want to enable it now? [Y/N]: ").lower() == 'y':
+            _enable_ac()
 
         print("\nDone. You can change your settings in %s\n" % _config)
 
