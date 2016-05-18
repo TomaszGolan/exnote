@@ -15,10 +15,16 @@ def main():
 @main.command(help='Create a new note.')
 @click.argument('title', type=str)
 @click.option('-n', '--note', type=str, default=None, help='Note subject.')
+@click.option('-s', '--src', type=str, default=None, help='Path to file.')
 @click.option('-t', '--tags', type=str, default=None, help='Note tags.')
-def new(title, note, tags):
+def new(title, note, src, tags):
     n = Note(title.lstrip('.').replace('/', '.'), new=True)
-    n.new(note)
+    try:
+        n.fromfile(src)
+    except IOError:
+        click.secho("%s could not be opened!" % src, fg='red')
+    except:
+        n.new(note)
     n.create_meta(tags)
 
 
@@ -78,6 +84,15 @@ def show(title):
     n = Note(title)
     n.load()
     print(n)
+
+
+@main.command(help="Run a note.")
+@click.argument('title', type=str)
+@click.option('-e', '--env', type=str, default='bash',
+              help='What should be note run by')
+def run(title, env):
+    n = Note(title)
+    n.run(env)
 
 
 @main.command('ls', help='List of notes.')

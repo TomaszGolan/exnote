@@ -7,6 +7,7 @@ from config import cfg
 from utils import get_multline
 from ConfigParser import SafeConfigParser
 from datetime import datetime
+from subprocess import call
 
 
 class Note:
@@ -23,7 +24,7 @@ class Note:
 
     def new(self, ctx=None):
         if os.path.isfile(self._path):
-            click.secho("%s already exists!" % self._path, fg='red')
+            click.secho("%s already exists!" % self._title, fg='red')
             sys.exit(1)
 
         with open(self._path, 'w') as f:
@@ -47,6 +48,11 @@ class Note:
             click.edit(filename=self._path, editor=cfg['editor'])
         except:
             click.edit(filename=self._path)
+
+    def fromfile(self, src):
+        with open(src, 'r') as f:
+            ctx = f.read()
+        self.new(ctx)
 
     def add_tags(self, tags):
         _tags = self._get_tags()
@@ -130,3 +136,6 @@ class Note:
 
     def unarchive(self):
         self._change_meta("archived", "False")
+
+    def run(self, env):
+        call([env, self._path])
