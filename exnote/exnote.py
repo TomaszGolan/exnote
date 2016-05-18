@@ -90,9 +90,10 @@ def show(title):
 @click.argument('title', type=str)
 @click.option('-e', '--env', type=str, default='bash',
               help='What should be note run by')
-def run(title, env):
+@click.option('-a', '--arg', type=str, default='', help='Script arguments.')
+def run(title, env, arg):
     n = Note(title)
-    n.run(env)
+    n.run(env, arg)
 
 
 @main.command('ls', help='List of notes.')

@@ -137,5 +137,5 @@ class Note:
     def unarchive(self):
         self._change_meta("archived", "False")
 
-    def run(self, env):
-        call([env, self._path])
+    def run(self, env, arg=''):
+        call([env, self._path, arg])
