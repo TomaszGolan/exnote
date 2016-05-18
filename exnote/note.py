@@ -10,11 +10,12 @@ from datetime import datetime
 
 
 class Note:
-    def __init__(self, title):
+    def __init__(self, title, new=False):
         self._title = title
         self._path = os.path.join(cfg['path'], title)
         self._meta = os.path.join(cfg['path'], ".meta", title)
         self._ctx = None
+        new or self._confirm()
 
     def __str__(self):
         return self._title + '\n' + '='*len(self._title) + '\n\n' \
@@ -28,13 +29,12 @@ class Note:
         with open(self._path, 'w') as f:
             f.write(ctx or get_multline(self))
 
-    def confirm(self):
+    def _confirm(self):
         if not os.path.isfile(self._path):
-            click.secho("%s does not exists!" % self._path, fg='red')
+            click.secho("%s does not exists!" % self._title, fg='red')
             sys.exit(1)
 
     def load(self):
-        self.confirm()
         with open(self._path, 'r') as f:
             self._ctx = f.read()
 

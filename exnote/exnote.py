@@ -17,7 +17,7 @@ def main():
 @click.option('-n', '--note', type=str, default=None, help='Note subject.')
 @click.option('-t', '--tags', type=str, default=None, help='Note tags.')
 def new(title, note, tags):
-    n = Note(title.lstrip('.').replace('/', '.'))
+    n = Note(title.lstrip('.').replace('/', '.'), new=True)
     n.new(note)
     n.create_meta(tags)
 
@@ -36,7 +36,6 @@ def append(title, note):
 @click.argument('title', type=str)
 def archive(title):
     n = Note(title)
-    n.confirm()
     n.archive()
 
 
@@ -44,7 +43,6 @@ def archive(title):
 @click.argument('title', type=str)
 def unarchive(title):
     n = Note(title)
-    n.confirm()
     n.unarchive()
 
 
@@ -53,7 +51,6 @@ def unarchive(title):
 @click.option('-t', '--tags', type=str, required=True, help='Note tags.')
 def tag(title, tags):
     n = Note(title)
-    n.confirm()
     n.add_tags(tags)
     n.touch()
 
@@ -63,7 +60,6 @@ def tag(title, tags):
 @click.option('-t', '--tags', type=str, required=True, help='Note tags.')
 def untag(title, tags):
     n = Note(title)
-    n.confirm()
     n.remove_tags(tags)
     n.touch()
 
@@ -72,7 +68,6 @@ def untag(title, tags):
 @click.argument('title', type=str)
 def edit(title):
     n = Note(title)
-    n.confirm()
     n.edit()
     n.touch()
 
