@@ -139,3 +139,7 @@ class Note:
 
     def run(self, env, arg=''):
         call([env, self._path, arg])
+
+    def delete(self):
+        os.remove(self._path)
+        os.remove(self._meta)

@@ -96,6 +96,13 @@ def run(title, env, arg):
     n.run(env, arg)
 
 
+@main.command(help="Delete a note.")
+@click.argument('title', type=str)
+def rm(title):
+    n = Note(title)
+    n.delete()
+
+
 @main.command('ls', help='List of notes.')
 @click.option('-t', '--tags', type=str, default=None, help='Filter by tags.')
 @click.option('-a', '--all', type=str, is_flag=True, help='Show archived.')
