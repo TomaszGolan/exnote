@@ -24,7 +24,7 @@ Commands:
   untag      Remove tags from a note.
 ```
 
-* [Basic usage](#basic_usage)
+* [Basic usage](#basic-usage)
 * [Archiving](#archiving)
 * [Tagging](#tagging)
 * [Inline operations](#inline-operations)
