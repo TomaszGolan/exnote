@@ -1,80 +1,261 @@
-Executable Notes (planning stage)
-=================================
+Executable Notes
+================
 
-Kind of "wife-away I am bored" project.
-
-The idea is to have command line app to make notes:
-
-* directly from command line, e.g.
+ExNote is a simple app to manage notes from command line, with possibility
+to run them as scripts.
 
 ```
-exnote new title                           # get multi-line input
-exnote new title --note "this is my note"  # note init with some text
-exnote append title --note "extra text"    # add some text to existing note
+Usage: exnote [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  append     Append some text to existing note.
+  archive    Archive a note.
+  edit       Edit a note with external editor.
+  ls         List of notes.
+  new        Create a new note.
+  rm         Delete a note.
+  run        Run a note.
+  show       Print a note.
+  tag        Add tags to a note.
+  unarchive  Unarchive a note.
+  untag      Remove tags from a note.
 ```
 
-* using chosen editor
+* [Basic usage](#basic_usage)
+* [Archiving](#archiving)
+* [Tagging](#tagging)
+* [Inline operations](#inline_operations)
+* [Running notes](#running_notes)
+* [Tips and Tricks](#tips_and_tricks)
+* [Installation](#installation)
+
+# Basic usage
+
+* Create a note
 
 ```
-exnote edit title  # open note in external editor (create new one if necessary)
+$ exnote new my_note
+
+my_note
+=======
+
+(empty line close note)
+Hello World!
 ```
 
-* from bash history
+* List notes
 
 ```
-exnote new title --bash N     # save last N commands
-exnote append title --bash N  # or add last N commands into existing note
+$ exnote ls
+
+01. my_note   
 ```
 
-* or from file
+* Show a note
 
 ```
-exnote new title --file path/to/file
-exnote append title --file path/to/file
+$ exnote show my_note
+
+my_note
+=======
+
+Hello World!
 ```
 
-Each note can be run as a script:
+* Append to a note
 
 ```
-exnote run title
-exnote run title --env python
+$ exnote append my_note
+
+my_note
+=======
+
+Hello World!
+Goodbye World!   
 ```
 
-and, obviously, printed:
+* Edit a note in external editor
 
 ```
-exnote show title
+$ exnote edit my_note
 ```
 
-or deleted:
+* Remove a note
 
 ```
-exnote del title
+$ exnote rm my_note
 ```
 
-Each note can be tagged:
+# Archiving
+
+Each note can be archived, so it will not be shown by default on the list.
 
 ```
-exnote new title --tags 'tag1, tag2, tag3'  # when created
-exnote tag title --tags 'tag4, tag5, tag6'  # or tagged existing note
+$ exnote new my_note_to_archive
+$ exnote ls
+
+01. my_note_to_archive   
+02. my_note              
+
+$ exnote archive my_note_to_archive
+$ exnote ls
+
+01. my_note
+
+$ exnote ls -a
+
+01. my_note_to_archive   
+02. my_note              
+
+$ exnote unarchive my_note_to_archive
+$ exnote ls
+
+01. my_note_to_archive   
+02. my_note      
 ```
 
-or untagged:
+# Tagging
+
+Each note can be tagged, which can be used for selective listing.
 
 ```
-exnote untag title --tags 'tag2, tag6'
+$ exnote tag my_note -t general
+$ exnote ls
+
+01. my_note              #general
+02. my_note_to_archive   
+
+$ exnote ls -t general
+
+01. my_note   #general
+
+$ exnote untag my_note -t general
+$ exnote ls
+
+01. my_note              
+02. my_note_to_archive  
 ```
 
-Tags can be then used when listing notes:
+# Inline operations
+
+* Use `-n / --note` to pass a subject
 
 ```
-exnote list
-exnote list --tag 'tag1'
+$ exnote new another_note -n 'inline note'
+$ exnote show another_note
+
+another_note
+============
+
+inline note
+
+$ exnote append another_note -n 'inline append'
+$ exnote show another_note
+
+another_note
+============
+
+inline note
+inline append
 ```
 
-Notes can be archived (not shown on by default on the list):
+* Use `-t / --tags` to add tags when note is created
 
 ```
-exnote archive title
-exnote unarchive title
+$ exnote new tagged_note -n 'this is awesome note' -t 'general, pointless'
+$ exnote ls
+
+01. tagged_note          #general #pointless
+02. another_note         
+03. my_note              
+04. my_note_to_archive
 ```
+
+* Use `-s / --src` to create a note from existing file
+
+```
+$ exnote new config -s ~/.exnote.ini
+$ exnote show config
+
+config
+======
+
+[SETTINGS]
+path = /home/goran/.exnote
+editor = gedit
+```
+
+# Running notes
+
+Each note can be run as a script (bash by default).
+
+```
+$ exnote new do_echo -n 'echo "Hi $USER"' -t bash
+$ exnote run do_echo
+
+Hi goran
+```
+
+`-a / --arg` flag can be used to pass arguments to a script
+
+```
+$ exnote new print -n 'echo $1' -t bash
+$ exnote run print -a 'I am a fancy note'
+
+I am a fancy note
+```
+
+`-e / --env` flag can be used to define how note should be run
+
+```
+$ exnote new pyprint -t python
+
+pyprint
+=======
+
+(empty line close note)
+import os
+print "Hi %s" % os.getenv('USER')
+
+$ exnote run pyprint -e python
+
+Hi goran
+```
+
+# Tips and Tricks
+
+* I could not find a workaround to create a note from last used bash commands,
+but this works fine:
+
+```
+$ exnote new what_i_did -n "`history 5`"
+$ exnote show what_i_did
+
+what_i_did
+==========
+
+ 2062  exnote new print -n 'echo $1' -t bash
+ 2063  exnote run print -a 'I am a fancy note'
+ 2064  exnote new pyprint -t python
+ 2065  exnote run pyprint -e python
+ 2066  exnote new what_i_did -n "`history 5`"
+```
+
+* Use `exnote --help` to get a list of commands and `exnote COMMAND --help`
+to get more info about each command.
+
+# Installation
+
+To install exnote simply clone this repository and run setup.py
+(requires `setuptools`):
+
+```
+git clone https://github.com/TomaszGolan/exnote.git
+cd exnote
+python setup.py build install
+```
+
+> Configuration file is located at ~/.exnote.ini and it is created on first run.
