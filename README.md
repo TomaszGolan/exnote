@@ -27,9 +27,9 @@ Commands:
 * [Basic usage](#basic_usage)
 * [Archiving](#archiving)
 * [Tagging](#tagging)
-* [Inline operations](#inline_operations)
-* [Running notes](#running_notes)
-* [Tips and Tricks](#tips_and_tricks)
+* [Inline operations](#inline-operations)
+* [Running notes](#running-notes)
+* [Tips and Tricks](#tips-and-tricks)
 * [Installation](#installation)
 
 # Basic usage
